@@ -6,8 +6,8 @@
       %table.table
         %tbody
           %tr
-            %td{ style: "width: 214px; height: 145px;" }
-              %img{ src: "#{item.thumbnail}", style: "width: 140px; height: 128px;" }
+            %td{ style: "width: 16%" }
+              %img{ src: "#{item.thumbnail}", style: "width: 100%; max-width: 120px;" }
             %td
               .lead= link_to(item.title, item.url)
               = item.price

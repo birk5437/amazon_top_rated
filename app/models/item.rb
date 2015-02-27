@@ -21,9 +21,9 @@ class Item < ActiveRecord::Base
 
       i = Item.find_or_initialize_by(reddit_id: data["id"])
 
-      i.url = data["url"],
-      i.title = data["title"],
-      i.ups = data["ups"],
+      i.url = data["url"]
+      i.title = data["title"]
+      i.ups = data["ups"]
       i.thumbnail = data["thumbnail"]
       price_string = data["title"][/\[\$\d+\.?\d?\d?\]/].to_s.gsub("[", "").gsub("$", "").gsub("]", "")
       i.price = price_string.to_d if price_string.present?
