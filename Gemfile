@@ -39,9 +39,10 @@ gem 'spring',        group: :development
 gem 'bundler'
 
 group :development do
-  gem 'pry-rails'
   gem 'better_errors'
 end
+
+gem 'pry-rails'
 
 gem 'devise', github: 'plataformatec/devise'
 gem 'omniauth'
