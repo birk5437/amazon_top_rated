@@ -3,7 +3,8 @@
   %hr
   .row{style: "border-top: 1px;"}
     .col-xs-12.col-sm-2
-      %img{ src: "#{item.thumbnail}", style: "display: block; margin-left: auto; margin-right: auto; width: 100%; max-width: 140px;" }
+      %a{ href: "#{item.url}" }
+        %img{ src: "#{item.thumbnail}", style: "display: block; margin-left: auto; margin-right: auto; width: 100%; max-width: 140px;" }
     .col-xs-12.col-sm-10.xs-text-center
       .lead
         = link_to(item.title, item.url)
