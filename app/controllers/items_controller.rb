@@ -1,10 +1,12 @@
 class ItemsController < ApplicationController
+  before_filter :redirect_unless_admin, only: [:new, :create, :edit, :update, :destroy, :get_image_list, :get_listings]
   before_action :set_item, only: [:show, :edit, :update, :destroy, :vote]
 
   # GET /items
   # GET /items.json
   def index
-    @items = Item.order("ups desc")
+    # TODO: replace sort_order with acts_as_votable
+    @items = Item.order("sort_order asc")
   end
 
   # GET /items/1
@@ -25,6 +27,7 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
+    @item.created_by = current_user
 
     respond_to do |format|
       if @item.save
@@ -81,7 +84,35 @@ class ItemsController < ApplicationController
   end
 
 
-  private
+  def get_image_list
+    begin
+      url = params[:url]
+      md5_url = Digest::SHA256.hexdigest(url)
+      image_list = DbCacheItem.get(md5_url, valid_for: 3.days) do
+        require 'open-uri'
+        doc = Nokogiri::HTML(open(url))
+        doc.css('img').map{ |i| i.attributes["src"].value }.to_json
+      end
+      # render json: doc.css('img').map{ |i| i.attributes["src"].value }
+      render partial: "image_list", locals: {images: JSON.parse(image_list) }
+    rescue Exception => e
+      render partial: "image_list_error", :status => 500
+    end
+  end
+
+  def get_listings
+    Item.get_listings(current_user: current_user)
+    redirect_to root_path, notice: 'Pulled new listings from Reddit!'
+  end
+
+
+  private ##################################################################################################################################
+
+  # TODO: use declarative_authorization gem when roles/CRUD gets more complex
+  def redirect_unless_admin
+    redirect_to root_path unless current_user && current_user.admin?
+  end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])
@@ -89,6 +120,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:url, :title, :description, :price)
+      params.require(:item).permit(:url, :title, :description, :price, :thumbnail)
     end
 end

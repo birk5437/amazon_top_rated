@@ -42,6 +42,8 @@ group :development do
   gem 'better_errors'
 end
 
+gem 'nokogiri', '~> 1.6'
+
 gem 'pry-rails'
 
 gem 'devise', github: 'plataformatec/devise'
@@ -64,3 +66,4 @@ gem 'haml-rails'
 
 gem 'formtastic', :github => 'justinfrench/formtastic', :branch => 'master'
 gem 'formtastic-bootstrap'
+gem 'underscore-rails'

@@ -1,7 +1,12 @@
 class Item < ActiveRecord::Base
   acts_as_votable
 
-  def self.get_listings
+  validates_presence_of :url, :thumbnail, :title, :sort_order
+
+  belongs_to :created_by, class_name: "User"
+
+
+  def self.get_listings(current_user: nil)
     # Gets a listing of links from reddit.
     #
     # @param (see LinksComments#info)
@@ -20,13 +25,20 @@ class Item < ActiveRecord::Base
       data = child["data"]
 
       i = Item.find_or_initialize_by(reddit_id: data["id"])
+      next unless i.new_record?
 
       i.url = data["url"]
       i.title = data["title"]
       i.ups = data["ups"]
+      i.sort_order = i.ups * -1 if i.ups.present?
+      i.sort_order ||= 0
       i.thumbnail = data["thumbnail"]
-      price_string = data["title"][/\[\$\d+\.?\d?\d?\]/].to_s.gsub("[", "").gsub("$", "").gsub("]", "")
+      price_string = data["title"][/\[\$\d+\.?\d?\d?\]/].to_s.gsub("[", "").gsub("$", "").gsub("]", "").presence
+      price_string ||= data["title"][/\d+\.\d\d/].to_s.gsub("[", "").gsub("$", "").gsub("]", "")
       i.price = price_string.to_d if price_string.present?
+
+      i.created_by = current_user if current_user.present?
+
       i.save! if i.price.present? && i.thumbnail != "nsfw"
     end
   end
