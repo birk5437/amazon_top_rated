@@ -45,21 +45,22 @@
 
 .image-list {
   overflow: scroll;
+  // overflow-y: scroll;
 }
 
 .clickable {
   cursor: pointer;
 }
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 7px;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, .5);
-  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
+// ::-webkit-scrollbar {
+//   -webkit-appearance: none;
+//   width: 7px;
+// }
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: rgba(0, 0, 0, .5);
+//   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+// }
 
 // http://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0
 //$bgDefault      : #9b59b6;
