@@ -87,11 +87,18 @@ class ItemsController < ApplicationController
   def get_image_list
     begin
       url = params[:url]
+      uri = URI::parse(url)
       md5_url = Digest::SHA256.hexdigest(url)
-      image_list = DbCacheItem.get(md5_url, valid_for: 3.days) do
+      image_list = DbCacheItem.get(md5_url, valid_for: 14.days) do
         require 'open-uri'
         doc = Nokogiri::HTML(open(url))
-        doc.css('img').map{ |i| i.attributes["src"].value }.to_json
+        image_urls = doc.css('img').map do |i|
+          img_uri = URI::parse(i.attributes["src"].value)
+          img_uri.host = uri.host if img_uri.host.blank?
+          img_uri.scheme = uri.scheme if img_uri.scheme.blank?
+          img_uri.to_s
+        end
+        image_urls.to_json
       end
       # render json: doc.css('img').map{ |i| i.attributes["src"].value }
       render partial: "image_list", locals: {images: JSON.parse(image_list) }
