@@ -5,6 +5,15 @@ class Item < ActiveRecord::Base
 
   belongs_to :created_by, class_name: "User"
 
+  def affiliate_url
+    uri = URI::parse(url)
+    return url unless uri.host.to_s.include?("amazon.com")
+    query_array = uri.query.to_s.split("&")
+    query_array.delete_if{ |item| item.starts_with?("tag=") }
+    query_array << "tag=dilutionofpre-20"
+    uri.query = query_array.join("&")
+    uri.to_s
+  end
 
   def self.get_listings(current_user: nil)
     # Gets a listing of links from reddit.
