@@ -85,19 +85,23 @@ class ItemsController < ApplicationController
 
 
   def get_image_list
+    #TODO: This should really be JSON and restful and stuff
     begin
       url = params[:url]
       uri = URI::parse(url)
       md5_url = Digest::SHA256.hexdigest(url)
-      image_list = DbCacheItem.get(md5_url, valid_for: 14.days) do
+      page_html = DbCacheItem.get(md5_url, valid_for: 14.days) do
         require 'open-uri'
         doc = Nokogiri::HTML(open(url))
-        doc.css('img').map{ |i| i.attributes["src"].value }.to_json
+        doc.to_html
       end
 
-      parsed_image_list = JSON.parse(image_list)
+      nokogiri_from_html = Nokogiri::HTML(page_html)
+      image_list = nokogiri_from_html.css('img').map{ |i| i.attributes["src"].value }
+      product_title = nokogiri_from_html.css('#productTitle').first.try(:content).to_s
+      product_price = nokogiri_from_html.css("#priceblock_ourprice").first.try(:content).to_s.gsub("$", "")
 
-      parsed_image_list.map! do |i|
+      image_list.map! do |i|
         i.gsub!(" ", "%20")
         img_uri = URI::parse(i)
         img_uri.host = uri.host if img_uri.host.blank?
@@ -106,8 +110,8 @@ class ItemsController < ApplicationController
         img_uri.to_s
       end
 
-      # render json: doc.css('img').map{ |i| i.attributes["src"].value }
-      render partial: "image_list", locals: {images: parsed_image_list }
+
+      render partial: "image_list", locals: {images: image_list, product_title: product_title, product_price: product_price }
     rescue Exception => e
       Rails::logger.warn("ERROR - #{e.inspect}")
       render partial: "image_list_error", :status => 500

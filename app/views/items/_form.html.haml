@@ -83,6 +83,15 @@
       }).done(function(html) {
         $("#image_form_group").html(html);
 
+        var $imageList = $(".image-list");
+        if ( !$("#item_price").val() ){
+          $("#item_price").val($imageList.attr("product_price"));
+        }
+
+        if ( !$("#item_title").val() ){
+          $("#item_title").val($imageList.attr("product_title"));
+        }
+
         $("img").off('click').on('click', function(e){
           $("#item_url").off("keyup");
           $(".image-list").hide();

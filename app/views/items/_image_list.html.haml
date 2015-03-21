@@ -1,7 +1,7 @@
 .image-list-title
   %h6 Select an Image
   %hr
-%div.image-list
+%div.image-list{ product_title: product_title, product_price: product_price}
   %table
     %tr
       - images.each do |image_url|
