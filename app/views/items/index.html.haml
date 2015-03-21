@@ -1,26 +1,29 @@
 - model_class = Item
-- @items.each do |item|
-  %hr
-  .row{style: "border-top: 1px;"}
-    .col-xs-12.col-sm-2
-      %a{ href: "#{item.affiliate_url}" }
-        %img{ src: "#{item.thumbnail}", style: "display: block; margin-left: auto; margin-right: auto; width: 100%; max-width: 140px;" }
-    .col-xs-12.col-sm-10.xs-text-center
-      %h4
-        = link_to(item.title, item.affiliate_url)
-      %p
-        = item.description
-    - if user_signed_in?
-      .row
-        .col-xs-12.col-sm-4
-          .buttons-center
-            - if current_user.admin?
-              = link_to "Info", item_path(item), {:class => "btn btn-default"}
-            - if (item.created_by == current_user) || current_user.superuser?
-              = link_to "Edit", edit_item_path(item), {:class => "btn btn-primary"}
-              = link_to t('.destroy', :default => t("helpers.links.destroy")), 
-                    item_path(item),
-                    :method => 'delete',
-                    :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                    :class => 'btn btn-danger'
-        .col-xs-0.col-sm-8
+
+%hr
+  .row
+  - @items.each do |item|
+    .col-xs-12.col-sm-4.col-md-3.col-lg-2{ style: "height: 24em; border: 1px dotted grey;" }
+      .row{style: "" }
+        .col-xs-12.text-center
+          %h5
+            = link_to(item.title, item.affiliate_url)
+        .col-xs-12
+          %a{ href: "#{item.affiliate_url}" }
+            %img{ src: "#{item.thumbnail}", style: "max-height: 10em; max-width: 100%; display: block; margin-left: auto; margin-right: auto;" }
+        .col-xs-12.text-center{style: "height: 90%;" }
+          %small{style: "max-height: 4.5em; display: block; overflow-y: hidden;"}
+            = item.description
+        - if user_signed_in?
+          .col-xs-12
+            .buttons-center
+              - if current_user.admin?
+                = link_to "Info", item_path(item), {:class => "btn btn-default"}
+              - if (item.created_by == current_user) || current_user.superuser?
+                = link_to "Edit", edit_item_path(item), {:class => "btn btn-primary"}
+                = link_to t('.destroy', :default => t("helpers.links.destroy")), 
+                      item_path(item),
+                      :method => 'delete',
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger'
+          .col-xs-0
