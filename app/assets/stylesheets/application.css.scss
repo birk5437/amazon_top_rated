@@ -11,6 +11,9 @@
 * file per style scope.
 *
 *= require_tree .
+*= require token-input
+*=  require token-input-mac
+*=  require token-input-facebook
 *= require_self
 */
 @import "bootstrap_configuration";

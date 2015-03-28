@@ -7,6 +7,12 @@ class ItemsController < ApplicationController
   def index
     # TODO: replace sort_order with acts_as_votable
     @items = Item.order("sort_order asc")
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @items }
+    end
+
   end
 
   # GET /items/1
@@ -176,6 +182,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:url, :title, :description, :price, :thumbnail, :sort_order)
+      params.require(:item).permit(:url, :title, :description, :price, :thumbnail, :sort_order, :tag_list)
     end
 end

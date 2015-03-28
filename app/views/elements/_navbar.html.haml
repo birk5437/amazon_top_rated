@@ -10,6 +10,15 @@
   -# Collect the nav links, forms, and other content for toggling
   #navbar-collapse-1.collapse.navbar-collapse
     %ul.nav.navbar-nav
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+          Categories
+          %b.caret
+        %ul.dropdown-menu
+          - tags = Tag.order("taggings_count desc").limit(15).sort_by(&:name)
+          - tags.each do |tag|
+            - if tag.items.present?
+              %li= link_to tag.name, "/tags/#{tag.dehumanized_name}"
     %ul.nav.navbar-nav.navbar-right
       - if defined?(Devise)
         - if user_signed_in?

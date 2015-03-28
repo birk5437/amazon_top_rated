@@ -25,6 +25,10 @@
     .col-md-10
       = f.text_field :title, :class => 'text-field form-control'
   .form-group
+    = f.label :tag_list, :class => 'control-label col-md-2'
+    .col-md-10
+      = f.text_field :tag_list, :class => 'text-field form-control', "data-pre" => @item.tag_list.map{ |t_name| Tag.find_or_initialize_by(name: t_name) }.to_json
+  .form-group
     = f.label :description, :class => 'control-label col-md-2'
     .col-md-10
       = f.text_area :description, :class => 'text-field form-control'
@@ -44,6 +48,14 @@
 
 :javascript
   $(document).ready(function(){
+    $("#item_tag_list").tokenInput('/tags.json', {
+      prePopulate: $("#item_tag_list").data('pre'),
+      crossDomain: false,
+      tokenValue: "name",
+      preventDuplicates: true,
+      theme: 'facebook'
+    });
+
     $(".selected-image").removeClass("hide");
 
     if ( $("#image_selection > img").prop("src") ) {

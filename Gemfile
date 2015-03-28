@@ -69,3 +69,7 @@ gem 'formtastic-bootstrap'
 gem 'underscore-rails'
 gem 'iconv'
 gem 'google-search'
+gem 'acts-as-taggable-on', '~> 3.4'
+
+# http://railscasts.com/episodes/258-token-fields?view=asciicast
+gem 'jquery-tokeninput-rails'
