@@ -94,12 +94,19 @@ class ItemsController < ApplicationController
       page_html = DbCacheItem.get(md5_url, valid_for: 14.days) do
         require 'open-uri'
         doc = Nokogiri::HTML(open(url))
-        doc.to_html
+        # TODO: put this in DbCacheItem?
+        # http://po-ru.com/diary/fixing-invalid-utf-8-in-ruby-revisited/
+        ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+        ic.iconv(doc.to_html + ' ')[0..-2]
       end
 
       nokogiri_from_html = Nokogiri::HTML(page_html)
       image_list = nokogiri_from_html.css('img').map{ |i| i.attributes["src"].value }
       product_title = nokogiri_from_html.css('#productTitle').first.try(:content).to_s
+      if product_title.blank?
+        product_title = nokogiri_from_html.css("[id*='Title']").first.try(:content).to_s
+      end
+
       product_price = nokogiri_from_html.css("#priceblock_ourprice").first.try(:content).to_s.gsub("$", "")
 
       # title_for_url = product_title.match(/[a-zA-Z0-9 ]+/).to_s.gsub(" ", "%20")
@@ -118,10 +125,12 @@ class ItemsController < ApplicationController
 
       # nokogiri_from_html = Nokogiri::HTML(page_html)
 
-      # TODO: cache this
-      title_for_url = product_title.match(/[a-zA-Z0-9 ]+/).to_s.gsub(" ", "%20")
-      Google::Search::Image.new(:query => product_title).each do |image|
-        image_list << image.uri
+      if product_title.present?
+        # TODO: cache the google results
+        # title_for_url = product_title.match(/[a-zA-Z0-9 ]+/).to_s.gsub(" ", "%20")
+        Google::Search::Image.new(:query => product_title).each do |image|
+          image_list << image.uri
+        end
       end
 
       image_list.map! do |i|
