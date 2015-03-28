@@ -89,6 +89,7 @@ class ItemsController < ApplicationController
     begin
       url = params[:url]
       uri = URI::parse(url)
+      #TODO: DRY this up
       md5_url = Digest::SHA256.hexdigest(url)
       page_html = DbCacheItem.get(md5_url, valid_for: 14.days) do
         require 'open-uri'
@@ -100,6 +101,20 @@ class ItemsController < ApplicationController
       image_list = nokogiri_from_html.css('img').map{ |i| i.attributes["src"].value }
       product_title = nokogiri_from_html.css('#productTitle').first.try(:content).to_s
       product_price = nokogiri_from_html.css("#priceblock_ourprice").first.try(:content).to_s.gsub("$", "")
+
+      title_for_url = product_title.match(/[a-zA-Z0-9 ]+/).to_s.gsub(" ", "%20")
+      google_url = URI::parse("http://www.google.com/search?q=#{title_for_url}&tbm=isch")
+
+      #TODO: DRY this up
+      md5_url = Digest::SHA256.hexdigest(google_url.to_s)
+      page_html = DbCacheItem.get(md5_url, valid_for: 14.days) do
+        require 'open-uri'
+        doc = Nokogiri::HTML(open(google_url))
+        doc.to_html
+      end
+
+      nokogiri_from_html = Nokogiri::HTML(page_html)
+      image_list = image_list + nokogiri_from_html.css('img').map{ |i| i.attributes["src"].value }
 
       image_list.map! do |i|
         i.gsub!(" ", "%20")
