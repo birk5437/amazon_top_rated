@@ -4,6 +4,7 @@ class DbCacheItem < ActiveRecord::Base
     item = DbCacheItem.find_or_initialize_by(key: key)
     if item.new_record?
       item.value = yield
+      Rails::logger.warn("BURKE - #{item.value}")
       item.save if item.value.present?
     end
     return item.value
