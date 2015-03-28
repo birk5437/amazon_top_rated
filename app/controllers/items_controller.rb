@@ -126,12 +126,18 @@ class ItemsController < ApplicationController
 
       image_list.map! do |i|
         i.gsub!(" ", "%20")
-        img_uri = URI::parse(i)
-        img_uri.host = uri.host if img_uri.host.blank?
-        img_uri.scheme = uri.scheme if img_uri.scheme.blank?
-        img_uri.path = img_uri.path.prepend("/") unless img_uri.path.starts_with?("/")
-        img_uri.to_s
+        begin
+          img_uri = URI::parse(i)
+          img_uri.host = uri.host if img_uri.host.blank?
+          img_uri.scheme = uri.scheme if img_uri.scheme.blank?
+          img_uri.path = img_uri.path.prepend("/") unless img_uri.path.starts_with?("/")
+          img_uri.to_s
+        rescue Exception => e
+          Rails::logger.warn("WARNING - URI parse failed - #{e.inspect}")
+          nil
+        end
       end
+      image_list.select!(&:present?)
 
 
       render partial: "image_list", locals: {images: image_list, product_title: product_title, product_price: product_price }
