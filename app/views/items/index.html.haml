@@ -19,7 +19,7 @@
               = money_format(item.price)
         .col-xs-12{style: "position: absolute; top: 80%;"}
           .buttons-center
-            = link_to("I want one!", item.affiliate_url, {:class => "btn btn-green-with-white", :style => "position: absolute; right: 10%;"})
+            = link_to("I want one!", item.affiliate_url, {:target => "_blank", :class => "btn btn-green-with-white", :style => "position: absolute; right: 10%;"})
 
         - if user_signed_in?
           .col-xs-12{style: "position: absolute; top: 50%;"}
