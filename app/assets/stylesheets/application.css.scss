@@ -22,6 +22,13 @@
 
 @import "bootstrap";
 
+.btn-green-with-white {
+  // fd5b1b
+  @include button-variant(white, #0e8830, #0e8830);
+  box-shadow: 3px 3px 3px #888888;
+
+}
+
 //->Prelang (ui_framework:twitter_bootstrap)
 
 // Give everything in 'yield' margin to separate it.

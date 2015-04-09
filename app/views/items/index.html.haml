@@ -4,19 +4,23 @@
   .row
   - @items.each do |item|
     -#.col-xs-12.col-sm-4.col-md-3.col-lg-2{ style: "height: 24em; border: 1px dotted grey;" }
-    .col-xs-12.col-sm-4.col-md-3.col-lg-2{ style: "height: 24em; overflow-y: hidden; text-align: center;" }
+    .col-xs-12.col-sm-4.col-md-3.col-lg-2{ style: "height: 24em; overflow-y: hidden; text-align: right; margin-bottom: 2em;" }
       .row{style: "" }
         .col-xs-12.text-center
           %h5
             - truncated_title = truncate(item.title, length: 40, omission: "", separator: " ")
             = link_to(truncated_title, item.affiliate_url)
         .col-xs-12
-          %a{ href: "#{item.affiliate_url}" }
-            %img{ src: "#{item.thumbnail}", style: "width: 90%; display: block; margin-left: auto; margin-right: auto;" }
+          -#%a{ href: "#{item.affiliate_url}" }
+          %img{ src: "#{item.thumbnail}", style: "width: 90%; display: block; margin-left: auto; margin-right: auto;" }
         - if item.price.present?
-          .col-xs-12.text-center.transparent-purple{style: "position: absolute; right: 10%; top: 10%; max-width: 6em; max-height: 3em;" }
+          .col-xs-12.text-center.transparent-purple{style: "position: absolute; right: 64%; top: 81%; max-width: 6em; max-height: 3em;" }
             %small{style: "max-height: 4.5em; display: block; overflow-y: hidden; color: white;"}
               = money_format(item.price)
+        .col-xs-12{style: "position: absolute; top: 80%;"}
+          .buttons-center
+            = link_to("I want one!", item.affiliate_url, {:class => "btn btn-green-with-white", :style => "position: absolute; right: 10%;"})
+
         - if user_signed_in?
           .col-xs-12{style: "position: absolute; top: 50%;"}
             .buttons-center
