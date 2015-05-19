@@ -38,3 +38,12 @@
         - else
           %li= link_to "Login", new_user_session_path
           %li= link_to "Sign Up", new_user_registration_path
+    %ul.nav.navbar-nav
+      .navbar-form
+        = text_field_tag "search-text", "", {class: "form-control", placeholder: "Search"}
+
+%script{src: "jquery.fastLiveFilter.js"}
+:javascript
+  $(function() {
+      $('#search-text').fastLiveFilter('.items');
+  });
