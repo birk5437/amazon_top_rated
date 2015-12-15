@@ -7,26 +7,31 @@
       %span.icon-bar
       %span.icon-bar
 
-    = link_to image_tag("totally_worth_it_logo_small_black.png", style: "height: 85%"), defined?(root_path) ? root_path : "#", class: "navbar-brand", style: "padding: 0; padding-top: 3px;"
+    =# link_to image_tag("totally_worth_it_logo_small_black.png", style: "height: 85%"), defined?(root_path) ? root_path : "#", class: "navbar-brand", style: "padding: 0; padding-top: 3px;"
+    = link_to "Hotel Lotion Database!", defined?(root_path) ? root_path : "#", class: "navbar-brand", style: "padding: 0; padding-top: 3px;"
   -# Collect the nav links, forms, and other content for toggling
   #navbar-collapse-1.collapse.navbar-collapse
-    %ul.nav.navbar-nav
-      %li.dropdown
-        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-          Categories
-          %b.caret
-        %ul.dropdown-menu
-          - tags = Tag.order("taggings_count desc").limit(15).sort_by(&:name)
-          - tags.each do |tag|
-            - if tag.items.present?
-              %li= link_to tag.name, "/tags/#{tag.dehumanized_name}"
+    - if Tag.any?
+      %ul.nav.navbar-nav
+        %li.dropdown
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            Categories
+            %b.caret
+          %ul.dropdown-menu
+            - tags = Tag.order("taggings_count desc").limit(15).sort_by(&:name)
+            - tags.each do |tag|
+              - if tag.hotels.present?
+                %li= link_to tag.name, "/tags/#{tag.dehumanized_name}"
     %ul.nav.navbar-nav.navbar-right
+      %li= link_to "View Hotels", hotels_path
+      %li= link_to "View Lotions", lotions_path
       - if defined?(Devise)
         - if user_signed_in?
           - if current_user.superuser?
-            %li= link_to "Get Items from Reddit!", get_listings_items_path, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }
+            %li= link_to "Add New User", new_user_path
           - if current_user.admin?
-            %li= link_to "Add New Item", new_item_path
+            %li= link_to "Add New Hotel", new_hotel_path
+            %li= link_to "Add New Lotion", new_lotion_path
           %li.dropdown
             %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
               Account

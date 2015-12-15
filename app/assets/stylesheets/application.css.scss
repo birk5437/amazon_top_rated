@@ -22,7 +22,7 @@
 
 @import "bootstrap";
 
-#items .item {
+.masonry-item {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -36,11 +36,11 @@
     float: left;
 }
 
-#items .item .picture .description {
+.masonry-item .picture .description {
     margin-top: 10px;
 }
 
-#items .item .picture {
+.masonry-item .picture {
     display: block;
     position: relative;
     z-index: 5;
@@ -48,13 +48,13 @@
     border-radius: 4px 4px 4px 4px;
 }
 
-#items .item .picture a.image {
+.masonry-item .picture a.image {
     display: block;
     height: auto;
     width: 100%;
 }
 
-#items .item .picture img {
+.masonry-item .picture img {
     border-radius: 2px 2px 0px 0px;
     height: auto;
     position: relative;
@@ -68,7 +68,7 @@
 }
 
 
-#items .item .meta span {
+.masonry-item .meta span {
     font-size: 12px !important;
     line-height: 16px !important;
     margin-right: 5px;
@@ -79,11 +79,11 @@
 }
 
 
-#items .item .item-content {
+.masonry-item .masonry-item-content {
   padding: 10px;
 }
 
-#items .item .picture .description {
+.masonry-item .picture .description {
     margin-top: 10px;
 }
 

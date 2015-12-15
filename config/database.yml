@@ -1,18 +1,18 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: amazon_top_rated_dev
+  database: hotel_lotion_db_dev
   host: localhost
   username: burke
-  password: burke
+  password: 
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: amazon_top_rated
+  database: hotel_lotion_db
   host: localhost
   username: burke
-  password: burke
+  password: 
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

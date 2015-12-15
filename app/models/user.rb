@@ -5,4 +5,5 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :items, as: :created_by, foreign_key: :created_by_id, dependent: :nullify
+  belongs_to :created_by, :class_name => "User"
 end
