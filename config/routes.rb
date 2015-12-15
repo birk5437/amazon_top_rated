@@ -1,27 +1,23 @@
 Rails.application.routes.draw do
 
   # resources :items
-  resources :hotels do
+  resources :items do
     #->Prelang (voting/acts_as_votable)
     member do
       get "vote"
     end
-  end
-  resources :lotions do
-    #->Prelang (voting/acts_as_votable)
-    member do
-      get "vote"
+    collection do
+      get "get_image_list"
+      get "get_listings"
     end
   end
 
-  resources :users
-
-  # resources :tags, only: [:index]
-  # match '/tags/:dehumanized_name', :via => :get, :to => 'tags#show'
+  resources :tags, only: [:index]
+  match '/tags/:dehumanized_name', :via => :get, :to => 'tags#show'
 
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords"}, skip: [:sessions, :registrations]
 
-  root 'lotions#index'
+  root 'items#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
